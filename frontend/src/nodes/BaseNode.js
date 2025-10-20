@@ -7,7 +7,6 @@ import { getHandleId, getHandlePosition, getHandleStyle } from "./utils/handleHe
 export const BaseNode = ({ id, data, config }) => {
 	const { title = "Node", fields = [], handles = [], style = {} } = config;
 	const { deleteElements } = useReactFlow();
-
 	const [fieldStates, setFieldStates] = useState(() => initializeFieldStates(fields, data));
 
 	const handleDelete = () => {
@@ -48,7 +47,7 @@ export const BaseNode = ({ id, data, config }) => {
 					<h3 className="card-title text-sm m-0">{title}</h3>
 					<button
 						onClick={handleDelete}
-						className="btn btn-circle btn-ghost btn-xs text-error hover:bg-error hover:text-white"
+						className="btn btn-circle btn-xs btn-error btn-outline"
 						title="Delete node"
 					>
 						✕
