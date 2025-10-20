@@ -95,12 +95,15 @@ export const PipelineUI = () => {
 		event.dataTransfer.dropEffect = "move";
 	}, []);
 
-	const onEdgeClick = useCallback((event, edge) => {
-		event.stopPropagation();
-		if (window.confirm("Delete this connection?")) {
-			onEdgesChange([{ type: "remove", id: edge.id }]);
-		}
-	}, [onEdgesChange]);
+	const onEdgeClick = useCallback(
+		(event, edge) => {
+			event.stopPropagation();
+			if (window.confirm("Delete this connection?")) {
+				onEdgesChange([{ type: "remove", id: edge.id }]);
+			}
+		},
+		[onEdgesChange]
+	);
 
 	const defaultEdgeOptions = {
 		type: "smoothstep",
@@ -110,30 +113,28 @@ export const PipelineUI = () => {
 	};
 
 	return (
-		<>
-			<div ref={reactFlowWrapper} className="w-full h-[70vh]">
-				<ReactFlow
-					nodes={nodes}
-					edges={edges}
-					onNodesChange={onNodesChange}
-					onEdgesChange={onEdgesChange}
-					onConnect={onConnect}
-					onEdgeClick={onEdgeClick}
-					onDrop={onDrop}
-					onDragOver={onDragOver}
-					onInit={setReactFlowInstance}
-					nodeTypes={nodeTypes}
-					proOptions={proOptions}
-					snapGrid={[gridSize, gridSize]}
-					connectionLineType="smoothstep"
-					defaultEdgeOptions={defaultEdgeOptions}
-					deleteKeyCode={["Backspace", "Delete"]}
-				>
-					<Background color="#aaa" gap={gridSize} />
-					<Controls />
-					<MiniMap />
-				</ReactFlow>
-			</div>
-		</>
+		<div ref={reactFlowWrapper} className="w-full h-full">
+			<ReactFlow
+				nodes={nodes}
+				edges={edges}
+				onNodesChange={onNodesChange}
+				onEdgesChange={onEdgesChange}
+				onConnect={onConnect}
+				onEdgeClick={onEdgeClick}
+				onDrop={onDrop}
+				onDragOver={onDragOver}
+				onInit={setReactFlowInstance}
+				nodeTypes={nodeTypes}
+				proOptions={proOptions}
+				snapGrid={[gridSize, gridSize]}
+				connectionLineType="smoothstep"
+				defaultEdgeOptions={defaultEdgeOptions}
+				deleteKeyCode={["Backspace", "Delete"]}
+			>
+				<Background color="#aaa" gap={gridSize} />
+				<Controls />
+				<MiniMap />
+			</ReactFlow>
+		</div>
 	);
 };
