@@ -35,12 +35,10 @@ export const SubmitButton = () => {
 			})),
 		};
 
-		console.log("Pipeline Data:", pipeline);
 		setPipelineData(pipeline);
 
 		try {
 			const data = await pipelineService.parsePipeline(pipeline);
-			console.log("Backend Response:", data);
 			setBackendResponse(data);
 			setShowModal(true);
 		} catch (err) {

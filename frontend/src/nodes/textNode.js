@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { Handle, Position, useReactFlow } from "reactflow";
+import { useStore } from "../store";
 
 export const TextNode = ({ id, data }) => {
 	const { deleteElements } = useReactFlow();
+	const updateNodeField = useStore((state) => state.updateNodeField);
 	const [text, setText] = useState(data?.text || "{{input}}");
 	const [variables, setVariables] = useState([]);
 	const textareaRef = useRef(null);
@@ -26,7 +28,9 @@ export const TextNode = ({ id, data }) => {
 	};
 
 	const handleTextChange = (e) => {
-		setText(e.target.value);
+		const newText = e.target.value;
+		setText(newText);
+		updateNodeField(id, "text", newText);
 	};
 
 	const nodeWidth = Math.max(250, Math.min(500, text.length * 8));
@@ -65,6 +69,7 @@ export const TextNode = ({ id, data }) => {
 						onClick={handleDelete}
 						className="btn btn-circle btn-xs btn-error btn-outline"
 						title="Delete node"
+						aria-label="Delete text node"
 					>
 						✕
 					</button>

@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Dict, Any
@@ -79,6 +79,21 @@ def is_dag(nodes: List[Node], edges: List[Edge]) -> bool:
 def parse_pipeline(pipeline: Pipeline):
     num_nodes = len(pipeline.nodes)
     num_edges = len(pipeline.edges)
+    
+    # Validate edge references
+    node_ids = {node.id for node in pipeline.nodes}
+    for edge in pipeline.edges:
+        if edge.source not in node_ids:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid edge: source node '{edge.source}' does not exist"
+            )
+        if edge.target not in node_ids:
+            raise HTTPException(
+                status_code=400, 
+                detail=f"Invalid edge: target node '{edge.target}' does not exist"
+            )
+    
     dag_status = is_dag(pipeline.nodes, pipeline.edges)
     
     return {

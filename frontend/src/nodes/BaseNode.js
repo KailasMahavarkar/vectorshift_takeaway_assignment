@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Handle, useReactFlow } from "reactflow";
+import { useStore } from "../store";
 import { getFieldRenderer } from "./utils/fieldRenderers";
 import { initializeFieldStates, createFieldChangeHandler } from "./utils/stateHelpers";
 import { getHandleId, getHandlePosition, getHandleStyle } from "./utils/handleHelpers";
@@ -7,11 +8,19 @@ import { getHandleId, getHandlePosition, getHandleStyle } from "./utils/handleHe
 export const BaseNode = ({ id, data, config }) => {
 	const { title = "Node", fields = [], handles = [], style = {} } = config;
 	const { deleteElements } = useReactFlow();
+	const updateNodeField = useStore((state) => state.updateNodeField);
 	const [fieldStates, setFieldStates] = useState(() => initializeFieldStates(fields, data));
 
 	const handleDelete = () => {
 		deleteElements({ nodes: [{ id }] });
 	};
+
+	// Sync field states to global store
+	useEffect(() => {
+		Object.entries(fieldStates).forEach(([fieldName, fieldValue]) => {
+			updateNodeField(id, fieldName, fieldValue);
+		});
+	}, [fieldStates, id, updateNodeField]);
 
 	const renderField = (field) => {
 		const renderer = getFieldRenderer(field.type);
@@ -49,6 +58,7 @@ export const BaseNode = ({ id, data, config }) => {
 						onClick={handleDelete}
 						className="btn btn-circle btn-xs btn-error btn-outline"
 						title="Delete node"
+						aria-label={`Delete ${title} node`}
 					>
 						✕
 					</button>

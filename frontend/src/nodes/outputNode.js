@@ -17,7 +17,8 @@ const outputNodeConfig = {
       defaultValue: 'Text',
       options: [
         { value: 'Text', label: 'Text' },
-        { value: 'File', label: 'Image' }
+        { value: 'Image', label: 'Image' },
+        { value: 'File', label: 'File' }
       ]
     }
   ],
